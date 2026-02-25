@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "arc-tabs",
+  "version": "1.0",
+  "description": "Открытие новых вкладок в начале панели вкладок",
+  "permissions": [
+    "tabs", 
+    "tabGroups", 
+    "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Управление настройками вкладок"
+  },
+  "icons": {
+
+  }
+}

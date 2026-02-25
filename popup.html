@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arc Tabs Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 320px;
+            /* min-height: 240px; */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            /* height: 95vh; */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 10px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.8;
+            color: #d4d4d4;
+        }
+
+        .content {
+            padding: 20px 0;
+        }
+
+        .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .info-icon {
+            position: relative;
+            cursor: help;
+            padding: 2px;
+            /* width: 16px; */
+            /* height: 16px; */
+            /* background: rgba(255, 255, 255, 0.2); */
+            background: rgba(236, 35, 129, 0.2);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            /* font-weight: bold; */
+            transition: all 0.2s ease;
+            z-index: 5;
+        }
+
+        .info-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .info-tooltip {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            padding: 8px;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: — 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: -2;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .info-icon:hover .info-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(5px);
+        }
+
+        .slider-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, \0, 0.3);
+        }
+
+        .save-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ec008c, #fc6767);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 15px rgba(236, 0, 140,车 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .save-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #fc6767, #ec008c);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .save-btn:hover::before {
+            left: 0;
+        }
+
+        .save-btn:active {
+            transform: scale(0.98);
+        }
+
+        .create-group-btn {
+            width: 85%;
+            background: linear-gradient(45deg, #fc6767, #ec008c);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 15px rgba(236, 0, 140,车 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 10px;
+        }
+
+        .create-group-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ec008c, #fc6767);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .create-group-btn:hover::before {
+            left: 0;
+        }
+
+        .create-group-btn:active {
+            transform: scale(0.98);
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            text-align: center;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status.show {
+            opacity: 1;
+            height: auto;
+            padding: 12px;
+            margin-top: 15px;
+        }
+
+        .status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: rgba(244, 67, 54, 0.3);
+        }
+
+        .footer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 11px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Arc Tabs</h1>
+            <p>Long live the Arc browser</p>
+        </div>
+
+        <div class="content">
+            <div class="setting-group">
+                <div class="setting-label">
+                    <span>Задержка при запуске:</span>
+                    <div class="info-icon">
+                        wtf?
+                        <div class="info-tooltip">
+                            <p style="margin-bottom: 4px;">
+                                Время, на которое расширение отключается после запуска браузера.
+                            </p>
+                            <p>
+                                Нужно, чтобы отключить автоматическое перемещение вкладок, пока браузер открывает ранее закрытые вкладки
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="startupDelay" min="10000" max="60000" step="1000" value="15000">
+                    <div class="slider-value">
+                        <span id="delayValue">15</span>s
+                    </div>
+                </div>
+            </div>
+
+            <button id="saveBtn" class="save-btn">
+                Сохранить настройки
+            </button>
+
+            <div style="
+            display: flex;
+            align-items: center;
+            gap: 8px;">
+                <button id="createGroupBtn" class="create-group-btn">
+                    Создать группу arc-tabs
+                </button>
+
+                <div class="info-icon" style="margin-top: 10px;">
+                    wtf?
+                    <div class="info-tooltip" style="transform: translateX(-110%) translateY(-100%);">
+                        <p style="margin-bottom: 4px;">
+                            Создать группу вкладок arc-tabs. Она будет содержать одну пустую вкладку, которая будет использоваться для скролла наверх панели вкладок при открытии новой вкладки.
+                        </p>
+                        <p style="margin-bottom: 4px;">
+                            При удалении группы она будет создана снова автоматически.
+                        </p>
+                        <p>
+                            Чтобы удалить группу arc-tabs - можно выключить расширение, удалить группу и не создавать ее снова через эту кнопку
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div id="status" class="status"></div>
+        </div>
+
+        <div class="footer">
+            v1.0.0 - by angrechko
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
