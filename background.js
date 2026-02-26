@@ -1,7 +1,8 @@
 let isRestoringSession = false;
 let initializationTimeout = null;
 let settings = {
-    startupDelay: 15000
+    startupDelay: 15000,
+    pinnedGroups: ['arc-tabs']
 };
 
 // Инициализация группы arc-tabs
@@ -65,10 +66,18 @@ chrome.tabGroups.onRemoved.addListener((group) => {
 
 // Загружаем настройки при запуске
 chrome.storage.sync.get({
-    startupDelay: 15000
+    startupDelay: 15000,
+    pinnedGroups: ['arc-tabs']
 }, function(loadedSettings) {
     settings = loadedSettings;
     console.log('Настройки загружены. Задержка:', settings.startupDelay + 'ms');
+});
+
+// Обновляем настройки при изменении хранилища
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'sync') return;
+    if (changes.startupDelay) settings.startupDelay = changes.startupDelay.newValue;
+    if (changes.pinnedGroups) settings.pinnedGroups = changes.pinnedGroups.newValue;
 });
 
 // Обработчик сообщений от popup
@@ -87,6 +96,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         }
         
         sendResponse({success: true});
+    }
+
+    if (request.action === 'movePinnedGroupsToStart') {
+        movePinnedGroupsToStart().then(() => {
+            sendResponse({ success: true });
+        });
+        return true;
     }
 
     if (request.action === 'createArcGroup') {
@@ -132,22 +148,54 @@ chrome.tabs.onCreated.addListener((tab) => {
     }, 100);
 });
 
-function findPositionAfterGroups() {
-    return new Promise((resolve) => {
-        chrome.tabs.query({}, (tabs) => {
-            let maxGroupIndex = -1;
-            let hasGroups = false;
-            tabs.forEach(tab => {
-                if (tab.groupId !== -1) {
-                    hasGroups = true;
-                    if (tab.index > maxGroupIndex) {
-                        maxGroupIndex = tab.index;
-                    }
-                }
-            });
-            resolve(hasGroups ? maxGroupIndex + 1 : 0);
-        });
+async function movePinnedGroupsToStart() {
+    try {
+        const pinnedTitles = settings.pinnedGroups;
+        if (!pinnedTitles || pinnedTitles.length === 0) return;
+
+        const allTabs = await chrome.tabs.query({});
+        const startIndex = allTabs.filter(t => t.pinned).length;
+
+        const allGroups = await chrome.tabGroups.query({});
+
+        const groupsToMove = pinnedTitles
+            .map(title => allGroups.find(g => g.title === title))
+            .filter(Boolean)
+            .reverse();
+
+        for (const group of groupsToMove) {
+            await chrome.tabGroups.move(group.id, { index: startIndex });
+        }
+    } catch (error) {
+        console.error('Ошибка перемещения групп:', error);
+    }
+}
+
+async function findPositionAfterGroups() {
+    const pinnedTitles = settings.pinnedGroups;
+
+    if (!pinnedTitles || pinnedTitles.length === 0) {
+        return 0;
+    }
+
+    const allGroups = await chrome.tabGroups.query({});
+    const pinnedIds = new Set(
+        allGroups.filter(g => pinnedTitles.includes(g.title)).map(g => g.id)
+    );
+
+    if (pinnedIds.size === 0) {
+        return 0;
+    }
+
+    const tabs = await chrome.tabs.query({});
+    let maxIndex = -1;
+    tabs.forEach(tab => {
+        if (pinnedIds.has(tab.groupId) && tab.index > maxIndex) {
+            maxIndex = tab.index;
+        }
     });
+
+    return maxIndex >= 0 ? maxIndex + 1 : 0;
 }
 
 async function moveTabAfterGroups(tabId) {

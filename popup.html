@@ -13,267 +13,380 @@
 
         body {
             width: 320px;
-            /* min-height: 240px; */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #5b67d8 0%, #6d3fa0 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
             color: #fff;
-            padding: 0;
             overflow: hidden;
         }
 
         .container {
-            /* height: 95vh; */
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
             border-radius: 20px;
             margin: 10px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 22px 20px 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
+        /* ── Header ────────────────────────── */
         .header {
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: 300;
-            margin-bottom: 5px;
-            background: linear-gradient(45deg, #fff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header p {
-            font-size: 12px;
-            opacity: 0.8;
-            color: #d4d4d4;
-        }
-
-        .content {
-            padding: 20px 0;
-        }
-
-        .setting-group {
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             margin-bottom: 20px;
         }
 
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #fff;
+        }
+
+        .header p {
+            font-size: 11px;
+            opacity: 0.5;
+            margin-top: 4px;
+            letter-spacing: 0.2px;
+        }
+
+        /* ── Setting label ──────────────────── */
         .setting-label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #e0e0e0;
+            gap: 6px;
+            margin-bottom: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: rgba(255, 255, 255, 0.55);
         }
 
+        /* ── Info icon ──────────────────────── */
         .info-icon {
             position: relative;
             cursor: help;
-            padding: 2px;
-            /* width: 16px; */
-            /* height: 16px; */
-            /* background: rgba(255, 255, 255, 0.2); */
-            background: rgba(236, 35, 129, 0.2);
-            border-radius: 5px;
+            width: 15px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            /* font-weight: bold; */
-            transition: all 0.2s ease;
+            font-size: 9px;
+            font-style: italic;
+            font-weight: 700;
+            flex-shrink: 0;
+            transition: background 0.2s;
             z-index: 5;
         }
 
         .info-icon:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.28);
         }
 
         .info-tooltip {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 8px);
             left: 50%;
-            padding: 8px;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: — 12px;
-            border-radius: 8px;
+            transform: translateX(-50%) translateY(-4px);
+            background: rgba(15, 8, 35, 0.93);
+            color: rgba(255, 255, 255, 0.88);
+            padding: 10px 12px;
+            border-radius: 10px;
             font-size: 12px;
-            width: 200px;
+            font-style: normal;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+            line-height: 1.55;
+            width: 210px;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: -2;
-            backdrop-filter: blur(10px);
+            /* display: none; */
+            transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+            z-index: 100;
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             pointer-events: none;
+        }
+
+        .info-tooltip p + p {
+            margin-top: 6px;
         }
 
         .info-icon:hover .info-tooltip {
             opacity: 1;
             visibility: visible;
-            transform: translateX(-50%) translateY(5px);
+            transform: translateX(-50%) translateY(0);
+            /* display: block; */
+        }
+
+        /* Tooltip that opens to the left (for right-edge icons) */
+        .info-tooltip.tip-left {
+            left: auto;
+            right: 0;
+            transform: translateX(0) translateY(-4px);
+        }
+
+        .info-icon:hover .info-tooltip.tip-left {
+            transform: translateX(0) translateY(0);
+        }
+
+        /* Tooltip that opens above and to the left */
+        .info-tooltip.tip-left-up {
+            top: auto;
+            bottom: calc(100% + 8px);
+            left: auto;
+            right: 0;
+            transform: translateX(0) translateY(4px);
+        }
+
+        .info-icon:hover .info-tooltip.tip-left-up {
+            transform: translateX(0) translateY(0);
+        }
+
+        /* ── Slider ─────────────────────────── */
+        .setting-group {
+            margin-bottom: 20px;
         }
 
         .slider-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            padding: 8px 20px;
+            background: rgba(0, 0, 0, 0.18);
+            border-radius: 14px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
         }
 
         .slider-value {
-            min-width: 50px;
+            min-width: 36px;
             text-align: center;
-            font-weight: bold;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 12px;
-            border-radius: 15px;
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .slider-unit {
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0.8;
         }
 
         input[type="range"] {
             flex: 1;
             appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.2);
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0.9) 0%,
+                rgba(255, 255, 255, 0.9) var(--fill, 10%),
+                rgba(255, 255, 255, 0.2) var(--fill, 10%),
+                rgba(255, 255, 255, 0.2) 100%
+            );
             outline: none;
+            cursor: pointer;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 17px;
+            height: 17px;
             border-radius: 50%;
             background: #fff;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, \0, 0.3);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
         }
 
-        .save-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #ec008c, #fc6767);
-            color: white;
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ── Pinned groups chips ────────────── */
+        .chips-container {
+            background: rgba(0, 0, 0, 0.18);
+            border-radius: 14px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .chips-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .chips-list:empty {
+            display: none;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(236, 0, 140, 0.25);
+            border: 1px solid rgba(236, 0, 140, 0.35);
+            border-radius: 20px;
+            padding: 3px 6px 3px 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .chip-remove {
+            background: none;
             border: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 0;
+            font-size: 15px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s;
+        }
+
+        .chip-remove:hover {
+            color: #fff;
+        }
+
+        .chips-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .group-name-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 7px 11px;
+            color: #fff;
+            font-size: 12px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .group-name-input:focus {
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .group-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-add {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1;
+            padding: 0 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        /* ── Buttons ────────────────────────── */
+        .btn {
+            width: 100%;
+            border: none;
+            padding: 11px;
+            border-radius: 12px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.5s ease;
-            box-shadow: 0 4px 15px rgba(236, 0, 140,车 0.4);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
+            letter-spacing: 0.15px;
+            transition: transform 0.12s, opacity 0.15s, box-shadow 0.15s;
         }
 
-        .save-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #fc6767, #ec008c);
-            transition: all 0.5s ease;
-            z-index: -1;
+        .btn:active {
+            transform: scale(0.97);
         }
 
-        .save-btn:hover::before {
-            left: 0;
+        .btn-primary {
+            background: linear-gradient(135deg, #ec008c, #fc6767);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(236, 0, 140, 0.35);
+            margin-bottom: 10px;
         }
 
-        .save-btn:active {
-            transform: scale(0.98);
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(236, 0, 140, 0.5);
+            opacity: 0.93;
         }
 
-        .create-group-btn {
-            width: 85%;
-            background: linear-gradient(45deg, #fc6767, #ec008c);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.5s ease;
-            box-shadow: 0 4px 15px rgba(236, 0, 140,车 0.4);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            margin-top: 10px;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
 
-        .create-group-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ec008c, #fc6767);
-            transition: all 0.5s ease;
-            z-index: -1;
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.17);
         }
 
-        .create-group-btn:hover::before {
-            left: 0;
+        /* ── Action row (button + info icon) ── */
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .create-group-btn:active {
-            transform: scale(0.98);
+        .action-row .btn {
+            flex: 1;
         }
 
+        /* ── Status message ─────────────────── */
         .status {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 15px;
+            padding: 9px 14px;
+            border-radius: 10px;
             font-size: 12px;
             text-align: center;
             opacity: 0;
-            height: 0;
+            max-height: 0;
             overflow: hidden;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: opacity 0.3s, max-height 0.3s, margin-top 0.3s;
         }
 
         .status.show {
             opacity: 1;
-            height: auto;
-            padding: 12px;
-            margin-top: 15px;
+            max-height: 60px;
+            margin-top: 13px;
         }
 
         .status.success {
             background: rgba(76, 175, 80, 0.2);
-            border-color: rgba(76, 175, 80, 0.3);
+            border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         .status.error {
             background: rgba(244, 67, 54, 0.2);
-            border-color: rgba(244, 67, 54, 0.3);
+            border: 1px solid rgba(244, 67, 54, 0.3);
         }
 
+        /* ── Footer ─────────────────────────── */
         .footer {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
             font-size: 11px;
-            opacity: 0.6;
+            opacity: 0.35;
+            letter-spacing: 0.3px;
         }
     </style>
 </head>
@@ -287,63 +400,65 @@
         <div class="content">
             <div class="setting-group">
                 <div class="setting-label">
-                    <span>Задержка при запуске:</span>
+                    <span>Задержка при запуске</span>
                     <div class="info-icon">
-                        wtf?
+                        i
                         <div class="info-tooltip">
-                            <p style="margin-bottom: 4px;">
-                                Время, на которое расширение отключается после запуска браузера.
-                            </p>
-                            <p>
-                                Нужно, чтобы отключить автоматическое перемещение вкладок, пока браузер открывает ранее закрытые вкладки
-                            </p>
+                            <p>Время, на которое расширение отключается после запуска браузера.</p>
+                            <p>Нужно, чтобы не перемещать вкладки, пока браузер восстанавливает предыдущую сессию.</p>
                         </div>
                     </div>
                 </div>
                 <div class="slider-container">
                     <input type="range" id="startupDelay" min="10000" max="60000" step="1000" value="15000">
                     <div class="slider-value">
-                        <span id="delayValue">15</span>s
+                        <span id="delayValue">15</span><span class="slider-unit">s</span>
                     </div>
                 </div>
             </div>
 
-            <button id="saveBtn" class="save-btn">
-                Сохранить настройки
+            <div class="setting-group">
+                <div class="setting-label">
+                    <span>Закреплённые группы</span>
+                    <div class="info-icon">
+                        i
+                        <div class="info-tooltip">
+                            <p>Новые вкладки открываются после последней вкладки из этих групп.</p>
+                            <p>Группы вне списка при расчёте позиции игнорируются.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chips-container">
+                    <div class="chips-input-row">
+                        <input type="text" id="groupNameInput" class="group-name-input" placeholder="Название группы…">
+                        <button id="addGroupBtn" class="btn-add">+</button>
+                    </div>
+                    <div id="pinnedChips" class="chips-list"></div>
+                </div>
+            </div>
+
+            <button id="saveBtn" class="btn btn-primary">Сохранить настройки</button>
+
+            <div class="action-row">
+                <button id="createGroupBtn" class="btn btn-secondary">Создать группу arc-tabs</button>
+                <div class="info-icon">
+                    i
+                    <div class="info-tooltip tip-left-up">
+                        <p>Создаёт группу вкладок arc-tabs с одной пустой вкладкой для управления скроллом таббара.</p>
+                        <p>При удалении группа создаётся снова автоматически.</p>
+                        <p>Чтобы убрать совсем — отключите расширение и удалите группу вручную.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="moveGroupsBtn" class="btn btn-secondary" style="margin-top: 8px;">
+                Переместить группы в начало
             </button>
-
-            <div style="
-            display: flex;
-            align-items: center;
-            gap: 8px;">
-                <button id="createGroupBtn" class="create-group-btn">
-                    Создать группу arc-tabs
-                </button>
-
-                <div class="info-icon" style="margin-top: 10px;">
-                    wtf?
-                    <div class="info-tooltip" style="transform: translateX(-110%) translateY(-100%);">
-                        <p style="margin-bottom: 4px;">
-                            Создать группу вкладок arc-tabs. Она будет содержать одну пустую вкладку, которая будет использоваться для скролла наверх панели вкладок при открытии новой вкладки.
-                        </p>
-                        <p style="margin-bottom: 4px;">
-                            При удалении группы она будет создана снова автоматически.
-                        </p>
-                        <p>
-                            Чтобы удалить группу arc-tabs - можно выключить расширение, удалить группу и не создавать ее снова через эту кнопку
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            
 
             <div id="status" class="status"></div>
         </div>
 
-        <div class="footer">
-            v1.0.0 - by angrechko
-        </div>
+        <div class="footer">v1.0 · by angrechko</div>
     </div>
 
     <script src="popup.js"></script>
