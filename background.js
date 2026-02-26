@@ -138,7 +138,15 @@ chrome.tabs.onCreated.addListener((tab) => {
         console.log('Пропускаем вкладку во время восстановления сессии');
         return;
     }
-    
+
+    // Если вкладка не новая и имеет "родителя" - 
+    // значит вкладка была открыта по переходу по ссылке на текущей вкладке
+    // такую вкладку не перемещаем
+    if (tab.openerTabId !== undefined && tab.pendingUrl !== 'chrome://newtab/')
+        return;
+
+    // Иначе вкладка либо новая, либо открыта без родителя - из панели закладок
+    // перемещаем такую вкладку
     setTimeout(() => {
         chrome.tabs.get(tab.id, (currentTab) => {
             if (currentTab && !chrome.runtime.lastError) {
